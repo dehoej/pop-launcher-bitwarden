@@ -4,6 +4,7 @@ import json
 import os
 import sys
 from subprocess import run
+from time import sleep
 
 
 # App Class
@@ -38,7 +39,6 @@ class App(object):
 
         os.system(f"rbw get {self.matches[index]['id']} | tr -d '\\n' | xclip -selection clipboard -in")
         os.system(f'/usr/bin/notify-send --icon=gtk-authentication "Password" "Copied {self.matches[index]["name"]} - {self.matches[index]["user"]}  to clipboard"')
-        os.system(f"rbw get {self.matches[index]['id']} | tr -d '\\n' | xclip -selection clipboard -in")
 
         sys.stdout.write('"Close"\n')
         sys.stdout.flush()
@@ -91,6 +91,8 @@ def main():
                 app.search(request['Search'])
             elif 'Activate' in request:
                 app.activate(request['Activate'])
+                os.system(f"sleep 30 && xclip -sel clip < /dev/null")
+
         except json.decoder.JSONDecodeError:
             pass
 
